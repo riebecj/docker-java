@@ -4,6 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
@@ -107,6 +108,36 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                                 .withPublishedPort(22)
                                 .withProtocol(PortConfigProtocol.TCP)
                         )));
+
+        dockerClient.createServiceCmd(spec).exec();
+
+        List<Service> services = dockerClient.listServicesCmd()
+                .withNameFilter(Lists.newArrayList(SERVICE_NAME))
+                .exec();
+
+        assertThat(services, hasSize(1));
+
+        assertThat(services.get(0).getSpec(), is(spec));
+
+        dockerClient.removeServiceCmd(SERVICE_NAME).exec();
+    }
+
+    @Test
+    public void testCreateServiceWithCapabilityAdd() {
+        ServiceSpec spec = new ServiceSpec()
+                .withName(SERVICE_NAME)
+                .withTaskTemplate(new TaskSpec()
+                        .withForceUpdate(0)
+                        .withRuntime("container")
+                        .withContainerSpec(new ContainerSpec()
+                                .withImage("busybox")
+                                .withCapabilityAdd(Capability.NET_ADMIN))
+                )
+                .withLabels(ImmutableMap.of("com.docker.java.usage", "SwarmServiceIT"))
+                .withMode(new ServiceModeConfig().withReplicated(
+                        new ServiceReplicatedModeOptions()
+                                .withReplicas(1)
+                ));
 
         dockerClient.createServiceCmd(spec).exec();
 
