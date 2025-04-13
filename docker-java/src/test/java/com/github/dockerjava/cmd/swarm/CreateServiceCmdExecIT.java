@@ -127,17 +127,10 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
         ServiceSpec spec = new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
-                        .withForceUpdate(0)
-                        .withRuntime("container")
                         .withContainerSpec(new ContainerSpec()
-                                .withImage("busybox")
+                                .withImage(DEFAULT_IMAGE)
                                 .withCapabilityAdd(Capability.NET_ADMIN))
-                )
-                .withLabels(ImmutableMap.of("com.docker.java.usage", "SwarmServiceIT"))
-                .withMode(new ServiceModeConfig().withReplicated(
-                        new ServiceReplicatedModeOptions()
-                                .withReplicas(1)
-                ));
+                );
 
         dockerClient.createServiceCmd(spec).exec();
 
