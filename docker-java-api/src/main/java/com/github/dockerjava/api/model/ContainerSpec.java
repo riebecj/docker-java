@@ -470,6 +470,7 @@ public class ContainerSpec extends DockerObject implements Serializable {
     /**
      * @see #addedCapabilities
      */
+    @CheckForNull
     public Capability[] getCapabilityAdd() {
         return addedCapabilities;
     }
@@ -485,6 +486,7 @@ public class ContainerSpec extends DockerObject implements Serializable {
     /**
      * @see #droppedCapabilities
      */
+    @CheckForNull
     public Capability[] getCapabilityDrop() {
         return droppedCapabilities;
     }
