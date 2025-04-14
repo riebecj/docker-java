@@ -169,13 +169,6 @@ public class ContainerSpec extends DockerObject implements Serializable {
     @JsonProperty("Init")
     private Boolean init;
 
-    /**
-     * @since 1.35
-     * Isolation technology of the containers running the service. (Windows only)
-     */
-    @JsonProperty("Isolation")
-    private Isolation isolation;
-
     @JsonProperty("CapabilityAdd")
     private Capability[] addedCapabilities;
 
@@ -463,16 +456,6 @@ public class ContainerSpec extends DockerObject implements Serializable {
 
     public ContainerSpec withInit(Boolean init) {
         this.init = init;
-        return this;
-    }
-
-    @CheckForNull
-    public Isolation getIsolation() {
-        return isolation;
-    }
-
-    public ContainerSpec withIsolation(Isolation isolation) {
-        this.isolation = isolation;
         return this;
     }
 
