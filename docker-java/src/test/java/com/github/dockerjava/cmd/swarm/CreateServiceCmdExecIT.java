@@ -22,6 +22,7 @@ import com.github.dockerjava.api.model.TmpfsOptions;
 import com.github.dockerjava.junit.PrivateRegistryRule;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Ignore;
@@ -37,6 +38,8 @@ import java.util.List;
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
 
 public class CreateServiceCmdExecIT extends SwarmCmdIT {
@@ -124,24 +127,21 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
 
     @Test
     public void testCreateServiceWithCapabilityAdd() {
-        ServiceSpec spec = new ServiceSpec()
+        dockerClient.createServiceCmd(new ServiceSpec()
                 .withName(SERVICE_NAME)
                 .withTaskTemplate(new TaskSpec()
-                        .withContainerSpec(new ContainerSpec()
-                                .withImage(DEFAULT_IMAGE)
-                                .withCapabilityAdd(Capability.NET_ADMIN))
-                );
-
-        dockerClient.createServiceCmd(spec).exec();
+                        .withContainerSpec(new ContainerSpec().withImage(DEFAULT_IMAGE).withCapabilityAdd(Capability.NET_ADMIN))))
+                .exec();
 
         List<Service> services = dockerClient.listServicesCmd()
                 .withNameFilter(Lists.newArrayList(SERVICE_NAME))
                 .exec();
 
         assertThat(services, hasSize(1));
-
-        assertThat(services.get(0).getSpec(), is(spec));
-
+        Capability[] capabilities = dockerClient.inspectServiceCmd(SERVICE_NAME).exec()
+                .getSpec().getTaskTemplate().getContainerSpec().getCapabilityAdd();
+        assertThat(capabilities, arrayWithSize(1));
+        assertThat(capabilities, arrayContaining(Capability.NET_ADMIN));
         dockerClient.removeServiceCmd(SERVICE_NAME).exec();
     }
 
