@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * The specification for containers as used in {@link TaskSpec}
  *
- * @since {@link RemoteApiVersion#VERSION_1_24}
+ * @since {@link RemoteApiVersion#VERSION_1_41}
  */
 @EqualsAndHashCode
 @ToString
@@ -169,9 +169,17 @@ public class ContainerSpec extends DockerObject implements Serializable {
     @JsonProperty("Init")
     private Boolean init;
 
+    /**
+     * @since 1.41
+     * A list of kernel capabilities to add to the default set for the container.
+     */
     @JsonProperty("CapabilityAdd")
     private Capability[] addedCapabilities;
 
+    /**
+     * @since 1.41
+     * A list of kernel capabilities to drop from the default set for the container.
+     */
     @JsonProperty("CapabilityDrop")
     private Capability[] droppedCapabilities;
 
@@ -459,19 +467,31 @@ public class ContainerSpec extends DockerObject implements Serializable {
         return this;
     }
 
+    /**
+     * @see #addedCapabilities
+     */
     public Capability[] getCapabilityAdd() {
         return addedCapabilities;
     }
 
+    /**
+     * @see #addedCapabilities
+     */
     public ContainerSpec withCapabilityAdd(Capability... capAdd) {
         this.addedCapabilities = capAdd;
         return this;
     }
 
+    /**
+     * @see #droppedCapabilities
+     */
     public Capability[] getCapabilityDrop() {
         return droppedCapabilities;
     }
 
+    /**
+     * @see #droppedCapabilities
+     */
     public ContainerSpec withCapabilityDrop(Capability... capDrop) {
         this.droppedCapabilities = capDrop;
         return this;
