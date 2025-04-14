@@ -1,5 +1,7 @@
 package com.github.dockerjava.api.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * The Linux capabilities supported by Docker. The list of capabilities is defined in Docker's types.go, {@link #ALL} was added manually.
  *
@@ -9,7 +11,7 @@ public enum Capability {
     /**
      * This meta capability includes all Linux capabilities.
      */
-    ALL,
+    ALL("CAP_ALL"),
     /**
      * <ul>
      * <li>Enable and disable kernel auditing.
@@ -17,39 +19,39 @@ public enum Capability {
      * <li>Retrieve auditing status and filtering rules.
      * </ul>
      */
-    AUDIT_CONTROL,
+    AUDIT_CONTROL("CAP_AUDIT_CONTROL"),
     /**
      * Allow reading the audit log via multicast netlink socket.
      */
-    AUDIT_READ,
+    AUDIT_READ("CAP_AUDIT_READ"),
     /**
      * Write records to kernel auditing log.
      */
-    AUDIT_WRITE,
+    AUDIT_WRITE(("CAP_AUDIT_WRITE")),
     /**
      * Employ features that can block system suspend.
      */
-    BLOCK_SUSPEND,
+    BLOCK_SUSPEND("CAP_BLOCK_SUSPEND"),
     /**
      * Allow creating BPF maps, loading BPF Type Format (BTF) data, retrieve JITed code of BPF programs, and more.
      */
-    BPF,
+    BPF("CAP_BPF"),
     /**
      * Allow checkpoint/restore related operations. Introduced in kernel 5.9.
      */
-    CHECKPOINT_RESTORE,
+    CHECKPOINT_RESTORE("CAP_CHECKPOINT_RESTORE"),
     /**
      * Make arbitrary changes to file UIDs and GIDs (see chown(2)).
      */
-    CHOWN,
+    CHOWN("CAP_CHOWN"),
     /**
      * Bypass file read, write, and execute permission checks. (DAC is an abbreviation of "discretionary access control".)
      */
-    DAC_OVERRIDE,
+    DAC_OVERRIDE("CAP_DAC_OVERRIDE"),
     /**
      * Bypass file read permission checks and directory read and execute permission checks.
      */
-    DAC_READ_SEARCH,
+    DAC_READ_SEARCH("CAP_DAC_READ_SEARCH"),
     /**
      * <ul>
      * <li>Bypass permission checks on operations that normally require the file system UID of the process to match the UID of the file
@@ -60,7 +62,7 @@ public enum Capability {
      * <li>Specify O_NOATIME for arbitrary files in open(2)and fcntl(2).
      * </ul>
      */
-    FOWNER,
+    FOWNER("CAP_FOWNER"),
     /**
      * <ul>
      * <li>Don't clear set-user-ID and set-group-ID permission bits when a file is modified.
@@ -68,39 +70,39 @@ public enum Capability {
      * process.
      * </ul>
      */
-    FSETID,
+    FSETID("CAP_FSETID"),
     /**
      * Permit memory locking (mlock(2), mlockall(2), mmap(2), shmctl(2)).
      */
-    IPC_LOCK,
+    IPC_LOCK("CAP_IPC_LOCK"),
     /**
      * Bypass permission checks for operations on System V IPC objects.
      */
-    IPC_OWNER,
+    IPC_OWNER("CAP_IPC_OWNER"),
     /**
      * Bypass permission checks for sending signals (see kill(2)). This includes use of the ioctl(2) KDSIGACCEPT operation.
      */
-    KILL,
+    KILL("CAP_KILL"),
     /**
      * Establish leases on arbitrary files (see fcntl(2)).
      */
-    LEASE,
+    LEASE("CAP_LEASE"),
     /**
      * Set the FS_APPEND_FL and FS_IMMUTABLE_FL i-node flags (see chattr(1)).
      */
-    LINUX_IMMUTABLE,
+    LINUX_IMMUTABLE("CAP_LINUX_IMMUTABLE"),
     /**
      * Override Mandatory Access Control (MAC). Implemented for the Smack Linux Security Module (LSM).
      */
-    MAC_ADMIN,
+    MAC_ADMIN("CAP_MAC_ADMIN"),
     /**
      * Allow MAC configuration or state changes. Implemented for the Smack LSM.
      */
-    MAC_OVERRIDE,
+    MAC_OVERRIDE("CAP_MAC_OVERRIDE"),
     /**
      * Create special files using mknod(2).
      */
-    MKNOD,
+    MKNOD("CAP__MKNOD"),
     /**
      * Perform various network-related operations:
      * <ul>
@@ -116,37 +118,37 @@ public enum Capability {
      * SO_RCVBUFFORCE, and SO_SNDBUFFORCE.
      * </ul>
      */
-    NET_ADMIN,
+    NET_ADMIN("CAP_NET_ADMIN"),
     /**
      * Bind a socket to Internet domain privileged ports (port numbers less than 1024).
      */
-    NET_BIND_SERVICE,
+    NET_BIND_SERVICE("CAP_NET_BIND_SERVICE"),
     /**
      * (Unused) Make socket broadcasts, and listen to multicasts.
      */
-    NET_BROADCAST,
+    NET_BROADCAST("CAP_NET_BROADCAST"),
     /**
      * <ul>
      * <li>Use RAW and PACKET sockets.
      * <li>Bind to any address for transparent proxying.
      * </ul>
      */
-    NET_RAW,
+    NET_RAW("CAP_NET_RAW"),
     /**
      * Allow system performance and observability privileged operations using perf_events, i915_perf and other kernel subsystems
      */
-    PERFMON,
+    PERFMON("CAP_PERFMON"),
     /**
      * Set file capabilities.
      */
-    SETFCAP,
+    SETFCAP("SETFCAP"),
     /**
      * <ul>
      * <li>Make arbitrary manipulations of process GIDs and supplementary GID list.
      * <li>Forge GID when passing socket credentials via UNIX domain sockets.
      * </ul>
      */
-    SETGID,
+    SETGID("CAP_SETGUID"),
     /**
      * If file capabilities are not supported:
      * <ul>
@@ -162,14 +164,14 @@ public enum Capability {
      * <li>Make changes to the securebits flags.
      * </ul>
      */
-    SETPCAP,
+    SETPCAP("CAP_SETPCAP"),
     /**
      * <ul>
      * <li>Make arbitrary manipulations of process UIDs (setuid(2), setreuid(2), setresuid(2), setfsuid(2)).
      * <li>Make forged UID when passing socket credentials via UNIX domain sockets.
      * </ul>
      */
-    SETUID,
+    SETUID("CAP_SETUID"),
     /**
      * <ul>
      * <li>Perform a range of system administration operations including: quotactl(2), mount(2), umount(2), swapon(2), swapoff(2),
@@ -198,15 +200,15 @@ public enum Capability {
      * <li>Perform administrative operations on many device drivers.
      * </ul>
      */
-    SYS_ADMIN,
+    SYS_ADMIN("CAP_SYS_ADMIN"),
     /**
      * Use reboot(2) and kexec_load(2).
      */
-    SYS_BOOT,
+    SYS_BOOT("CAP_SYS_BOOT"),
     /**
      * Use chroot(2).
      */
-    SYS_CHROOT,
+    SYS_CHROOT("CAP_SYS_CHROOT"),
     /**
      * <ul>
      * <li>Perform privileged syslog(2) operations. See syslog(2) for information on which operations require privilege.
@@ -214,14 +216,14 @@ public enum Capability {
      * discussion of the kptr_restrict in proc(5).)
      * </ul>
      */
-    SYSLOG,
+    SYSLOG("CAP_SYSLOG"),
     /**
      * <ul>
      * <li>Load and unload kernel modules (see init_module(2) and delete_module(2))
      * <li>In kernels before 2.6.25: drop capabilities from the system-wide capability bounding set.
      * </ul>
      */
-    SYS_MODULE,
+    SYS_MODULE("CAP_SYS_MODULE"),
     /**
      * <ul>
      * <li>Raise process nice value (nice(2), setpriority(2)) and change the nice value for arbitrary processes.
@@ -234,11 +236,11 @@ public enum Capability {
      * <li>Use the MPOL_MF_MOVE_ALL flag with mbind(2) and move_pages(2).
      * </ul>
      */
-    SYS_NICE,
+    SYS_NICE("CAP_SYS_NICE"),
     /**
      * Use acct(2).
      */
-    SYS_PACCT,
+    SYS_PACCT("CAP_SYS_PACCT"),
     /**
      * <ul>
      * <li>Trace arbitrary processes using ptrace(2).
@@ -246,7 +248,7 @@ public enum Capability {
      * <li>Inspect processes using kcmp(2).
      * </ul>
      */
-    SYS_PTRACE,
+    SYS_PTRACE("CAP_SYS_PTRACE"),
     /**
      * <ul>
      * <li>Perform I/O port operations (iopl(2) and ioperm(2)).
@@ -262,7 +264,7 @@ public enum Capability {
      * <li>Perform a range of device-specific operations on other devices.
      * </ul>
      */
-    SYS_RAWIO,
+    SYS_RAWIO("CAP_SYS_RAWIO"),
     /**
      * <ul>
      * <li>Use reserved space on ext2 file systems.
@@ -281,23 +283,36 @@ public enum Capability {
      * <li>Set /proc/PID/oom_score_adj to a value lower than the value last set by a process with CAP_SYS_RESOURCE.
      * </ul>
      */
-    SYS_RESOURCE,
+    SYS_RESOURCE("CAP_SYS_RESOURCE"),
     /**
      * <ul>
      * <li>Set system clock (settimeofday(2), stime(2), adjtimex(2)).
      * <li>Set real-time (hardware) clock.
      * </ul>
      */
-    SYS_TIME,
+    SYS_TIME("CAP_SYS_TIME"),
     /**
      * <ul>
      * <li>Use vhangup(2).
      * <li>Employ various privileged ioctl(2) operations on virtual terminals.
      * </ul>
      */
-    SYS_TTY_CONFIG,
+    SYS_TTY_CONFIG("CAP_SYS_TTY_CONFIG"),
     /**
      * Trigger something that will wake up the system (set CLOCK_REALTIME_ALARM and CLOCK_BOOTTIME_ALARM timers).
      */
-    WAKE_ALARM
+    WAKE_ALARM("CAP_WAKE_ALARM");
+
+    private String compatibilityName;
+
+    //CHECKSTYLE:OFF
+    private Capability(String capName) {
+        compatibilityName = capName;
+    }
+    //CHECKSTYLE:ON
+
+    @JsonValue
+    public String getcompatibilityName() {
+        return compatibilityName;
+    }
 }
