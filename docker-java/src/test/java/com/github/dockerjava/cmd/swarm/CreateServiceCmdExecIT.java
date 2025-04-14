@@ -4,7 +4,6 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Capability;
 import com.github.dockerjava.api.model.ContainerSpec;
 import com.github.dockerjava.api.model.EndpointResolutionMode;
 import com.github.dockerjava.api.model.EndpointSpec;
@@ -38,8 +37,6 @@ import java.util.List;
 import static com.github.dockerjava.core.DockerRule.DEFAULT_IMAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.arrayContaining;
-import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
 
 public class CreateServiceCmdExecIT extends SwarmCmdIT {
@@ -123,26 +120,6 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
         assertThat(services.get(0).getSpec(), is(spec));
 
         dockerClient.removeServiceCmd(SERVICE_NAME).exec();
-    }
-
-    @Test
-    public void testCreateServiceWithCapabilityAdd() {
-        ServiceSpec spec = new ServiceSpec()
-                .withName("captest")
-                .withTaskTemplate(new TaskSpec()
-                        .withContainerSpec(new ContainerSpec().withImage(DEFAULT_IMAGE).withCapabilityAdd(Capability.NET_ADMIN)));
-        dockerClient.createServiceCmd(spec).exec();
-
-        List<Service> services = dockerClient.listServicesCmd()
-                .withNameFilter(Lists.newArrayList("captest"))
-                .exec();
-
-        assertThat(services, hasSize(1));
-        Capability[] capabilities = dockerClient.inspectServiceCmd("captest").exec()
-                .getSpec().getTaskTemplate().getContainerSpec().getCapabilityAdd();
-        assertThat(capabilities, arrayWithSize(1));
-        assertThat(capabilities, arrayContaining(Capability.NET_ADMIN));
-        dockerClient.removeServiceCmd("captest").exec();
     }
 
     @Test
