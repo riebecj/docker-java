@@ -138,8 +138,9 @@ public class CreateServiceCmdExecIT extends SwarmCmdIT {
                 .exec();
 
         assertThat(services, hasSize(1));
-        assertThat(services.get(0).getSpec(), is(spec));
-        Capability[] capabilities = dockerClient.inspectServiceCmd(SERVICE_NAME).exec()
+        ServiceSpec testSpec = dockerClient.inspectServiceCmd(services.get(0).getId()).exec().getSpec();
+        assertThat(testSpec, is(spec));
+        Capability[] capabilities = dockerClient.inspectServiceCmd(services.get(0).getId()).exec()
                 .getSpec().getTaskTemplate().getContainerSpec().getCapabilityAdd();
         assertThat(capabilities, arrayWithSize(1));
         assertThat(capabilities, arrayContaining(Capability.NET_ADMIN));
